@@ -78,7 +78,7 @@ pub fn load_boxes(filename: &str) -> Result<Vec<BoxId>, Box<Error>> {
     Ok(results)
 }
 
-pub fn checksum(ids: Vec<BoxId>) -> i32 {
+pub fn checksum(ids: &Vec<BoxId>) -> i32 {
     let mut count2 = 0;
     let mut count3 = 0;
 
