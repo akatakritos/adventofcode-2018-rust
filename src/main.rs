@@ -12,6 +12,7 @@ fn main() {
     match day {
         Ok(1) => day_one(),
         Ok(2) => day_two(),
+        Ok(3) => day_three(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1]))
     }
@@ -39,4 +40,13 @@ fn day_two() {
     let (b1, b2) = adventofcode::day02::find_correct_pair(&boxes).unwrap();
     let result2 = b1.common_letters_with(&b2);
     println!("Common letters of correct boxes: {}", result2);
+}
+
+fn day_three() {
+    let claims = adventofcode::day03::read_input("inputs\\day03.txt").unwrap();
+    let result1 = adventofcode::day03::calculate_overlap_area(&claims);
+    println!("overlapping area: {}sq inches", result1);
+
+    let result2 = adventofcode::day03::find_non_overlapping_claim(&claims).unwrap();
+    println!("non-overlapped claim: {:?}", result2);
 }

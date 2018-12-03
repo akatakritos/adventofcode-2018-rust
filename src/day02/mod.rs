@@ -149,13 +149,13 @@ mod test {
             .map(|s| BoxId::new(String::from(*s)))
             .collect();
 
-        assert_eq!(12, checksum(boxes));
+        assert_eq!(12, checksum(&boxes));
     }
 
     #[test]
     fn checksum_for_input() {
         let boxes = load_boxes("inputs\\day02.txt").unwrap();
-        let sum = checksum(boxes);
+        let sum = checksum(&boxes);
         assert_eq!(5704, sum);
     }
 
