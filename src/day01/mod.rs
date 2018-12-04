@@ -22,26 +22,24 @@ pub fn read_input(filename: &str) -> Result<Vec<i32>, io::Error> {
     Ok(result)
 }
 
-pub fn calculate_frequency(filename: &str) -> Result<i32, Box<Error>> {
+pub fn calculate_frequency(filename: &str) -> Result<i32, Box<dyn Error>> {
     let frequencies = read_input(filename)?;
     let sum = frequencies.iter().sum();
 
     Ok(sum)
 }
 
-pub fn find_first_duplicate_frequency(filename: &str) -> Result<i32, Box<Error>> {
+pub fn find_first_duplicate_frequency(filename: &str) -> Result<i32, Box<dyn Error>> {
     let frequencies = read_input(filename)?;
     let mut past_frequences = HashSet::new();
     let mut current_frequency = 0;
     const MAX_ITERS: i32 = 1000;
 
-    for i in 1..MAX_ITERS {
+    for _ in 1..MAX_ITERS {
         for freq in frequencies.iter() {
             current_frequency += *freq;
 
             if past_frequences.contains(&current_frequency) {
-                println!("Found match after {} iteratations and {} unqiue frequencies",
-                    i, past_frequences.len());
                 return Ok(current_frequency);
             } else {
                 past_frequences.insert(current_frequency);
