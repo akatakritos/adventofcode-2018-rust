@@ -13,6 +13,7 @@ fn main() {
         Ok(1) => day_one(),
         Ok(2) => day_two(),
         Ok(3) => day_three(),
+        Ok(4) => day_four(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1]))
     }
@@ -49,4 +50,14 @@ fn day_three() {
 
     let result2 = adventofcode::day03::find_non_overlapping_claim(&claims).unwrap();
     println!("non-overlapped claim: {:?}", result2);
+}
+
+fn day_four() {
+    let logs = adventofcode::day04::read_logs("inputs\\day04.txt").unwrap();
+    let guard_id = adventofcode::day04::find_sleepiest_guard(&logs);
+    let (minute, count) = adventofcode::day04::find_sleepiest_minute(&logs, guard_id);
+    println!("Guard #{} slept the most, particularly during minute {} for a total of {} days", guard_id, minute, count);
+
+    let (guard_id, minute) = adventofcode::day04::find_sleepiest_guard_minute(&logs);
+    println!("Guard #{} spent minute {} asleep more than any other guard.", guard_id, minute);
 }

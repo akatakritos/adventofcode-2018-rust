@@ -6,11 +6,23 @@ use std::error;
 use std::fmt;
 
 #[derive(Debug)]
+/// Represents a claim about a cut of fabric
 pub struct FabricClaim {
+
+    /// The id of the claim
     pub id: i32,
+
+    ///
+    /// The distance in inches from the left side of the fabric
     pub left: i32,
+
+    /// THe distance in inches from the top of the fabric
     pub top: i32,
+
+    /// The width in inches of the cut
     pub width: i32,
+
+    /// The height in inches of the cut
     pub height: i32
 }
 
@@ -65,13 +77,6 @@ impl fmt::Display for ParseFabricClaimError {
 }
 
 impl error::Error for ParseFabricClaimError {
-    fn description(&self) -> &str {
-        "Could not parse the line"
-    }
-
-    fn cause(&self) -> Option<&error::Error> {
-        None
-    }
 }
 
 #[cfg(test)]
@@ -80,7 +85,7 @@ mod test {
 
     #[test]
     fn parse_success() {
-        let claim : FabricClaim = "#1 @ 100,366: 24x27".parse().unwrap();
+        let claim: FabricClaim = "#1 @ 100,366: 24x27".parse().unwrap();
 
         assert_eq!(1, claim.id);
         assert_eq!(100, claim.left);
