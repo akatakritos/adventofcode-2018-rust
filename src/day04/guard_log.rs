@@ -9,6 +9,22 @@ pub struct GuardLog {
     pub log_type: GuardLogType,
 }
 
+impl GuardLog {
+    pub fn is_begin_shift(&self) -> bool {
+        match self.log_type {
+            GuardLogType::BeginShift(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn unwrap_guard_id(&self) -> u32 {
+        match self.log_type {
+            GuardLogType::BeginShift(id) => id,
+            _ => panic!("Tried to unwrap GuardLog for its guard id, but it was not a BeginShift entry."),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum GuardLogType {
     Wake,

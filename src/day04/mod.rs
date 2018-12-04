@@ -28,20 +28,12 @@ pub fn read_logs(filename: &str) -> Result<Vec<GuardLog>, Box<dyn Error>> {
 }
 
 pub fn find_sleepiest_guard(logs: &Vec<GuardLog>) -> u32 {
-    let mut current_guard: Option<u32> = None;
-    let mut started_sleep: Option<DateTime<Utc>> = None;
     let mut sleep_times: HashMap<u32, u32> = HashMap::new();
 
-    for log in logs.iter() {
-        match log.log_type {
-            GuardLogType::BeginShift(id) => current_guard = Some(id),
-            GuardLogType::Sleep => started_sleep = Some(log.utc),
-            GuardLogType::Wake => {
-                let duration = log.utc.signed_duration_since(started_sleep.unwrap());
-                let sleep_amount = sleep_times.entry(current_guard.unwrap()).or_insert(0);
-                *sleep_amount += duration.num_minutes() as u32;
-            }
-        }
+    let intervals = sleep_intervals(&logs);
+    for interval in intervals.iter() {
+        let sleep_amount = sleep_times.entry(interval.guard_id).or_insert(0);
+        *sleep_amount += interval.minutes;
     }
 
     let mut max_id = 0;
@@ -59,34 +51,24 @@ pub fn find_sleepiest_guard(logs: &Vec<GuardLog>) -> u32 {
 pub fn find_sleepiest_minute(logs: &Vec<GuardLog>, guard_id: u32) -> (u32, u32) {
     let mut sleep_map: HashMap<u32, u32> = HashMap::new();
 
-    let mut on_shift = false;
-    let mut started_sleep: Option<DateTime<Utc>> = None;
 
-    for log in logs.iter() {
-        match log.log_type {
-            GuardLogType::BeginShift(id) => {
-                on_shift = id == guard_id;
-            },
-            GuardLogType::Sleep => {
-                if on_shift {
-                    started_sleep = Some(log.utc);
-                }
-            },
-            GuardLogType::Wake => {
-                if on_shift {
-                    for minute in started_sleep.unwrap().minute()..log.utc.minute() {
-                        let count = sleep_map.entry(minute).or_insert(0);
-                        *count += 1;
-                    }
-                    started_sleep = None;
-                }
-            }
+    let intervals = sleep_intervals(&logs);
+    let guard_intervals = intervals.iter()
+        .filter(|i| i.guard_id == guard_id);
+
+    for interval in guard_intervals {
+        let start_minute = interval.started_at.minute();
+        let end_minute = start_minute + interval.minutes;
+
+        for minute in start_minute..end_minute {
+            let count = sleep_map.entry(minute).or_insert(0);
+            *count += 1;
         }
     }
 
-
     let mut max_minute = 0;
     let mut max_count = 0;
+
     for (minute, count) in sleep_map.iter() {
         if *count > max_count {
             max_count = *count;
@@ -99,14 +81,8 @@ pub fn find_sleepiest_minute(logs: &Vec<GuardLog>, guard_id: u32) -> (u32, u32) 
 
 pub fn find_sleepiest_guard_minute(logs: &Vec<GuardLog>) -> (u32, u32) {
     let mut guard_ids: Vec<u32> = logs.iter()
-        .filter(|log| match log.log_type {
-            GuardLogType::BeginShift(_) => true,
-            _ => false
-        })
-        .map(|log| match log.log_type {
-            GuardLogType::BeginShift(id) => id,
-            _ => panic!("nope")
-        })
+        .filter(|log| log.is_begin_shift())
+        .map(|log| log.unwrap_guard_id())
         .collect();
 
         guard_ids.dedup();
@@ -124,6 +100,38 @@ pub fn find_sleepiest_guard_minute(logs: &Vec<GuardLog>) -> (u32, u32) {
 
         max_guard_minute
 }
+
+fn sleep_intervals(logs: &Vec<GuardLog>) -> Vec<SleepInterval> {
+    let mut current_guard: Option<u32> = None;
+    let mut started_at: Option<DateTime<Utc>> = None;
+    let mut results: Vec<SleepInterval> = vec![];
+
+    for log in logs.iter() {
+        match log.log_type {
+            GuardLogType::BeginShift(guard_id) => current_guard = Some(guard_id),
+            GuardLogType::Sleep => started_at = Some(log.utc),
+            GuardLogType::Wake => {
+                let duration = log.utc.signed_duration_since(started_at.unwrap());
+
+                results.push(SleepInterval{
+                    guard_id: current_guard.unwrap(),
+                    minutes: duration.num_minutes() as u32,
+                    started_at: started_at.unwrap()
+                });
+            }
+        }
+    }
+
+    results
+}
+
+struct SleepInterval {
+    guard_id: u32,
+    minutes: u32,
+    started_at: DateTime<Utc>
+}
+
+
 
 #[cfg(test)]
 mod test {
