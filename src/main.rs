@@ -64,12 +64,11 @@ fn day_four() {
 }
 
 fn day_five() {
-    let mut input1 = adventofcode::day05::read_file("inputs\\day05.txt").unwrap();
-    let input2 = adventofcode::day05::read_file("inputs\\day05.txt").unwrap();
+    let input = adventofcode::day05::read_file("inputs\\day05.txt").unwrap();
 
-    adventofcode::day05::compress_polarities(&mut input1);
-    println!("After fully reacting, the polymer is {} units long.", input1.len());
+    let result1 = adventofcode::day05::compress_polarities(&input);
+    println!("After fully reacting, the polymer is {} units long.", result1.len());
 
-    let (unit, length) = adventofcode::day05::find_shortest(&input2);
+    let (unit, length) = adventofcode::day05::find_shortest(&input);
     println!("Afer removing all the '{}' units, the fully reacted polymer is {} units long.", unit, length);
 }

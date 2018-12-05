@@ -17,8 +17,6 @@ pub fn compress_polarities(chars: &Vec<char>) -> Vec<char> {
     let mut result: Vec<char> = vec![];
 
     for c in chars.iter() {
-        println!("{:?} - checking {}", result, *c);
-
         if result.len() == 0 {
             result.push(*c);
         } else if is_polar_pair(result[result.len() - 1], *c) {
