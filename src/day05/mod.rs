@@ -12,29 +12,23 @@ pub fn read_file(filename: &str) -> Result<Vec<char>, Box<dyn Error>> {
     Ok(result)
 }
 
-pub fn compress_polarities(chars: &mut Vec<char>) {
-    loop {
-        if !compress_single_pass(chars) {
-            return;
+pub fn compress_polarities(chars: &Vec<char>) -> Vec<char> {
+    // use a stack
+    let mut result: Vec<char> = vec![];
+
+    for c in chars.iter() {
+        println!("{:?} - checking {}", result, *c);
+
+        if result.len() == 0 {
+            result.push(*c);
+        } else if is_polar_pair(result[result.len() - 1], *c) {
+            result.pop(); // remove it!
+        } else {
+            result.push(*c);
         }
     }
-}
 
-fn compress_single_pass(chars: &mut Vec<char>) -> bool {
-    let mut i = 0;
-    let mut removed = false;
-
-    while i < chars.len() - 1 {
-        if is_polar_pair(chars[i], chars[i+1]) {
-            chars.remove(i);
-            chars.remove(i);
-            removed = true;
-        }
-
-        i += 1;
-    }
-
-    removed
+    result
 }
 
 fn is_polar_pair(c1: char, c2: char) -> bool {
@@ -52,15 +46,14 @@ pub fn find_shortest(chars: &Vec<char>) -> (char, usize) {
     let z = 'z' as u8;
 
     for unit in a..z {
-        let mut working_data = clone_without(&chars, unit as char);
-        compress_polarities(&mut working_data);
-
+        let working_data = clone_without(&chars, unit as char);
+        let result = compress_polarities(&working_data);
 
         if shortest_size.is_none() {
-            shortest_size = Some(working_data.len());
+            shortest_size = Some(result.len());
             shortest_unit = Some(unit as char);
-        } else if working_data.len() < shortest_size.unwrap() {
-            shortest_size = Some(working_data.len());
+        } else if result.len() < shortest_size.unwrap() {
+            shortest_size = Some(result.len());
             shortest_unit = Some(unit as char);
         }
     }
@@ -96,16 +89,16 @@ mod test {
 
     #[test]
     fn compress_polarities_sample() {
-        let mut sample: Vec<char> = "dabAcCaCBAcCcaDA".chars().collect();
-        compress_polarities(&mut sample);
-        assert_eq!(10, sample.len());
+        let sample: Vec<char> = "dabAcCaCBAcCcaDA".chars().collect();
+        let result = compress_polarities(&sample);
+        assert_eq!(10, result.len());
     }
 
     #[test]
     fn compress_polarities_input() {
-        let mut input = read_file("inputs\\day05.txt").unwrap();
-        compress_polarities(&mut input);
-        assert_eq!(11152, input.len());
+        let input = read_file("inputs\\day05.txt").unwrap();
+        let result = compress_polarities(&input);
+        assert_eq!(11152, result.len());
     }
 
     #[test]
