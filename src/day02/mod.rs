@@ -1,8 +1,8 @@
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs::File;
-use std::io::BufReader;
 use std::io::BufRead;
-use std::collections::HashMap;
+use std::io::BufReader;
 
 pub struct BoxId {
     pub id: String,
@@ -10,9 +10,7 @@ pub struct BoxId {
 
 impl BoxId {
     pub fn new(id: String) -> BoxId {
-        BoxId {
-            id,
-        }
+        BoxId { id }
     }
 
     fn hash(&self) -> HashMap<char, i32> {
@@ -27,17 +25,13 @@ impl BoxId {
     }
 
     /// Checks if the id has a character with exactly two instances
-    pub fn has_exactly_two(&self) -> bool{
-        self.hash()
-            .values()
-            .any(|count| *count == 2)
+    pub fn has_exactly_two(&self) -> bool {
+        self.hash().values().any(|count| *count == 2)
     }
 
     /// Checks if the id has a character with exactly three instances
     pub fn has_exactly_three(&self) -> bool {
-        self.hash()
-            .values()
-            .any(|count| *count == 3)
+        self.hash().values().any(|count| *count == 3)
     }
 
     /// Counts how many characters differ between two ids.
@@ -45,7 +39,8 @@ impl BoxId {
     /// If the ids are different lengths, only the length of the shorter
     /// id is considered
     pub fn count_differences_against(&self, other: &BoxId) -> usize {
-        self.id.chars()
+        self.id
+            .chars()
             .zip(other.id.chars())
             .filter(|(left, right)| left != right)
             .count()
@@ -53,7 +48,9 @@ impl BoxId {
 
     /// Gets a string of all the letters in common between two ids
     pub fn common_letters_with(&self, other: &BoxId) -> String {
-        let common_chars = self.id.chars()
+        let common_chars = self
+            .id
+            .chars()
             .zip(other.id.chars())
             .filter(|(left, right)| left == right)
             .map(|(left, _)| left);
@@ -66,7 +63,6 @@ impl BoxId {
         result
     }
 }
-
 
 pub fn load_boxes(filename: &str) -> Result<Vec<BoxId>, Box<Error>> {
     let f = File::open(filename)?;
@@ -106,7 +102,7 @@ pub fn find_correct_pair(boxes: &Vec<BoxId>) -> Option<(&BoxId, &BoxId)> {
     for b1 in boxes.iter() {
         for b2 in boxes.iter() {
             if b1.count_differences_against(&b2) == 1 {
-                return Some((b1, b2))
+                return Some((b1, b2));
             }
         }
     }
@@ -145,13 +141,8 @@ mod test {
     #[test]
     fn checksum_for_sample_gets_12() {
         let boxes: Vec<BoxId> = [
-            "abcdef",
-            "bababc",
-            "abbcde",
-            "abcccd",
-            "aabcdd",
-            "abcdee",
-            "ababab"]
+            "abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab",
+        ]
             .iter()
             .map(|s| BoxId::new(String::from(*s)))
             .collect();
@@ -177,7 +168,9 @@ mod test {
 
     #[test]
     fn find_correct_pair_for_sample() {
-        let boxes: Vec<BoxId>= ["abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"]
+        let boxes: Vec<BoxId> = [
+            "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz",
+        ]
             .iter()
             .map(|s| BoxId::new(String::from(*s)))
             .collect();

@@ -1,9 +1,9 @@
+use std::collections::HashSet;
+use std::error::Error;
+use std::fs::File;
 use std::io;
 use std::io::BufRead;
 use std::io::BufReader;
-use std::fs::File;
-use std::error::Error;
-use std::collections::HashSet;
 
 pub fn read_input(filename: &str) -> Result<Vec<i32>, io::Error> {
     let f = File::open(filename)?;
@@ -47,7 +47,10 @@ pub fn find_first_duplicate_frequency(filename: &str) -> Result<i32, Box<dyn Err
         }
     }
 
-    panic!(format!("Could not find a repeat in {} iterations", MAX_ITERS));
+    panic!(format!(
+        "Could not find a repeat in {} iterations",
+        MAX_ITERS
+    ));
 }
 
 #[cfg(test)]
@@ -68,8 +71,7 @@ mod test {
 
     #[test]
     fn find_first_duplicate_frequency_gets_it_right() {
-        let dupe = find_first_duplicate_frequency("inputs\\day01.txt")
-            .unwrap();
+        let dupe = find_first_duplicate_frequency("inputs\\day01.txt").unwrap();
         assert_eq!(56360, dupe);
     }
 }

@@ -1,14 +1,12 @@
-
 use regex::Regex;
-use std::str::FromStr;
-use std::num::ParseIntError;
 use std::error;
 use std::fmt;
+use std::num::ParseIntError;
+use std::str::FromStr;
 
 #[derive(Debug)]
 /// Represents a claim about a cut of fabric
 pub struct FabricClaim {
-
     /// The id of the claim
     pub id: i32,
 
@@ -23,7 +21,7 @@ pub struct FabricClaim {
     pub width: i32,
 
     /// The height in inches of the cut
-    pub height: i32
+    pub height: i32,
 }
 
 impl FromStr for FabricClaim {
@@ -46,13 +44,12 @@ impl FromStr for FabricClaim {
                 left,
                 top,
                 width,
-                height
-            })
+                height,
+            });
         }
 
         Err(ParseFabricClaimError::InvalidFormat(String::from(s)))
     }
-
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -71,13 +68,14 @@ impl fmt::Display for ParseFabricClaimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             ParseFabricClaimError::InvalidFormat(s) => write!(f, "Invalid format: '{}'", s),
-            ParseFabricClaimError::UnparsableToken => f.write_str("Part of the string could not be converted"),
+            ParseFabricClaimError::UnparsableToken => {
+                f.write_str("Part of the string could not be converted")
+            }
         }
     }
 }
 
-impl error::Error for ParseFabricClaimError {
-}
+impl error::Error for ParseFabricClaimError {}
 
 #[cfg(test)]
 mod test {

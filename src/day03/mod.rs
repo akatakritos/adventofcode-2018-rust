@@ -1,10 +1,10 @@
 mod fabricclaim;
 
+use self::fabricclaim::FabricClaim;
 use std::error;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use self::fabricclaim::FabricClaim;
 
 pub fn read_input(filename: &str) -> Result<Vec<FabricClaim>, Box<error::Error>> {
     let f = File::open(filename)?;
@@ -49,7 +49,8 @@ pub fn calculate_overlap_area(claims: &Vec<FabricClaim>) -> usize {
         apply(&mut fabric, &claim);
     }
 
-    let count = fabric.iter()
+    let count = fabric
+        .iter()
         .flat_map(|row| row.iter())
         .filter(|cell| *cell > &1)
         .count();
@@ -98,7 +99,6 @@ fn is_non_overlapping(claim: &FabricClaim, fabric: &Vec<Vec<i32>>) -> bool {
 
     true
 }
-
 
 #[cfg(test)]
 mod test {

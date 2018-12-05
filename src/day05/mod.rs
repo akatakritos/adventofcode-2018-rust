@@ -1,13 +1,11 @@
-use std::io::prelude::*;
-use std::fs::File;
 use std::error::Error;
+use std::fs::File;
+use std::io::prelude::*;
 
 pub fn read_file(filename: &str) -> Result<Vec<char>, Box<dyn Error>> {
     let f = File::open(filename)?;
 
-    let result: Vec<char> = f.bytes()
-        .map(|b| b.unwrap() as char)
-        .collect();
+    let result: Vec<char> = f.bytes().map(|b| b.unwrap() as char).collect();
 
     Ok(result)
 }
@@ -59,7 +57,7 @@ pub fn find_shortest(chars: &Vec<char>) -> (char, usize) {
     (shortest_unit.unwrap(), shortest_size.unwrap())
 }
 
-fn clone_without(chars: &Vec<char>, unit: char) -> Vec<char>{
+fn clone_without(chars: &Vec<char>, unit: char) -> Vec<char> {
     let mut result = vec![];
 
     for c in chars.iter() {
@@ -72,7 +70,7 @@ fn clone_without(chars: &Vec<char>, unit: char) -> Vec<char>{
 }
 
 fn is_unit(unit: char, c: char) -> bool {
-    return c == unit || (c as i8 - unit as i8).abs() == 32
+    return c == unit || (c as i8 - unit as i8).abs() == 32;
 }
 
 #[cfg(test)]

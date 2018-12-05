@@ -1,11 +1,11 @@
 mod guard_log;
 
 use chrono::prelude::*;
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use std::collections::HashMap;
 
 pub use self::guard_log::GuardLog;
 pub use self::guard_log::GuardLogType;
@@ -51,10 +51,8 @@ pub fn find_sleepiest_guard(logs: &Vec<GuardLog>) -> u32 {
 pub fn find_sleepiest_minute(logs: &Vec<GuardLog>, guard_id: u32) -> (u32, u32) {
     let mut sleep_map: HashMap<u32, u32> = HashMap::new();
 
-
     let intervals = sleep_intervals(&logs);
-    let guard_intervals = intervals.iter()
-        .filter(|i| i.guard_id == guard_id);
+    let guard_intervals = intervals.iter().filter(|i| i.guard_id == guard_id);
 
     for interval in guard_intervals {
         let start_minute = interval.started_at.minute();
@@ -80,25 +78,26 @@ pub fn find_sleepiest_minute(logs: &Vec<GuardLog>, guard_id: u32) -> (u32, u32) 
 }
 
 pub fn find_sleepiest_guard_minute(logs: &Vec<GuardLog>) -> (u32, u32) {
-    let mut guard_ids: Vec<u32> = logs.iter()
+    let mut guard_ids: Vec<u32> = logs
+        .iter()
         .filter(|log| log.is_begin_shift())
         .map(|log| log.unwrap_guard_id())
         .collect();
 
-        guard_ids.dedup();
+    guard_ids.dedup();
 
-        let mut max_guard_minute = (0, 0);
-        let mut max_count = 0;
+    let mut max_guard_minute = (0, 0);
+    let mut max_count = 0;
 
-        for guard_id in guard_ids {
-            let (minute, count) = find_sleepiest_minute(&logs, guard_id);
-            if count > max_count {
-                max_count = count;
-                max_guard_minute = (guard_id, minute);
-            }
+    for guard_id in guard_ids {
+        let (minute, count) = find_sleepiest_minute(&logs, guard_id);
+        if count > max_count {
+            max_count = count;
+            max_guard_minute = (guard_id, minute);
         }
+    }
 
-        max_guard_minute
+    max_guard_minute
 }
 
 fn sleep_intervals(logs: &Vec<GuardLog>) -> Vec<SleepInterval> {
@@ -113,10 +112,10 @@ fn sleep_intervals(logs: &Vec<GuardLog>) -> Vec<SleepInterval> {
             GuardLogType::Wake => {
                 let duration = log.utc.signed_duration_since(started_at.unwrap());
 
-                results.push(SleepInterval{
+                results.push(SleepInterval {
                     guard_id: current_guard.unwrap(),
                     minutes: duration.num_minutes() as u32,
-                    started_at: started_at.unwrap()
+                    started_at: started_at.unwrap(),
                 });
             }
         }
@@ -128,10 +127,8 @@ fn sleep_intervals(logs: &Vec<GuardLog>) -> Vec<SleepInterval> {
 struct SleepInterval {
     guard_id: u32,
     minutes: u32,
-    started_at: DateTime<Utc>
+    started_at: DateTime<Utc>,
 }
-
-
 
 #[cfg(test)]
 mod test {
