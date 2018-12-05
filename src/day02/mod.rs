@@ -26,18 +26,24 @@ impl BoxId {
         map
     }
 
+    /// Checks if the id has a character with exactly two instances
     pub fn has_exactly_two(&self) -> bool{
         self.hash()
             .values()
             .any(|count| *count == 2)
     }
 
+    /// Checks if the id has a character with exactly three instances
     pub fn has_exactly_three(&self) -> bool {
         self.hash()
             .values()
             .any(|count| *count == 3)
     }
 
+    /// Counts how many characters differ between two ids.
+    ///
+    /// If the ids are different lengths, only the length of the shorter
+    /// id is considered
     pub fn count_differences_against(&self, other: &BoxId) -> usize {
         self.id.chars()
             .zip(other.id.chars())
@@ -45,6 +51,7 @@ impl BoxId {
             .count()
     }
 
+    /// Gets a string of all the letters in common between two ids
     pub fn common_letters_with(&self, other: &BoxId) -> String {
         let common_chars = self.id.chars()
             .zip(other.id.chars())

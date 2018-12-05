@@ -14,6 +14,7 @@ fn main() {
         Ok(2) => day_two(),
         Ok(3) => day_three(),
         Ok(4) => day_four(),
+        Ok(5) => day_five(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1]))
     }
@@ -60,4 +61,15 @@ fn day_four() {
 
     let (guard_id, minute) = adventofcode::day04::find_sleepiest_guard_minute(&logs);
     println!("Guard #{} spent minute {} asleep more than any other guard.", guard_id, minute);
+}
+
+fn day_five() {
+    let mut input1 = adventofcode::day05::read_file("inputs\\day05.txt").unwrap();
+    let input2 = adventofcode::day05::read_file("inputs\\day05.txt").unwrap();
+
+    adventofcode::day05::compress_polarities(&mut input1);
+    println!("After fully reacting, the polymer is {} units long.", input1.len());
+
+    let (unit, length) = adventofcode::day05::find_shortest(&input2);
+    println!("Afer removing all the '{}' units, the fully reacted polymer is {} units long.", unit, length);
 }
