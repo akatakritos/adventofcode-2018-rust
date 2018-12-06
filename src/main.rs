@@ -15,6 +15,7 @@ fn main() {
         Ok(3) => day_three(),
         Ok(4) => day_four(),
         Ok(5) => day_five(),
+        Ok(6) => day_six(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1])),
     }
@@ -80,4 +81,14 @@ fn day_five() {
         "Afer removing all the '{}' units, the fully reacted polymer is {} units long.",
         unit, length
     );
+}
+
+fn day_six() {
+    let input = adventofcode::day06::read_input("inputs\\day06.txt").unwrap();
+
+    let ((x, y), size) = adventofcode::day06::find_max_enclosed_area(&input);
+    println!("Max enclosed area is around point ({}, {}) and has size {}", x, y, size);
+
+    let result2 = adventofcode::day06::find_area_of_min_region(&input, 10_0000);
+    println!("The region less than 10k manahattan distance has {} points", result2);
 }
