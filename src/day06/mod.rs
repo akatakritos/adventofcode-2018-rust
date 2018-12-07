@@ -1,6 +1,6 @@
-use std::error::Error;
-use std::collections::HashSet;
 use std::collections::HashMap;
+use std::collections::HashSet;
+use std::error::Error;
 use std::fs;
 
 type Point = (i32, i32);
@@ -31,7 +31,6 @@ pub fn find_max_enclosed_area(points: &[Point]) -> (Point, usize) {
         if let Some(index) = grid[x][maxy - 1] {
             infinite_indexes.insert(index);
         }
-
     }
 
     for y in 0..maxy {
@@ -85,9 +84,6 @@ pub fn find_area_of_min_region(points: &Vec<Point>, max_distance: usize) -> usiz
     let maxy = *maxy as usize + 1;
     // println!("maxx= {}, maxy={}", maxx, maxy);
 
-
-
-
     let mut count = 0;
     for x in 0..maxx {
         for y in 0..maxy {
@@ -102,9 +98,7 @@ pub fn find_area_of_min_region(points: &Vec<Point>, max_distance: usize) -> usiz
 }
 
 fn find_total_manhattan_distance(points: &Vec<Point>, point: &Point) -> usize {
-    points.iter()
-        .map(|p| manhattan_distance(p, point))
-        .sum()
+    points.iter().map(|p| manhattan_distance(p, point)).sum()
 }
 
 fn count_indexes(grid: &Vec<Vec<Option<usize>>>, index: usize) -> usize {
@@ -142,7 +136,6 @@ fn find_closest(points: &[Point], x: usize, y: usize) -> Option<usize> {
         } else if distance == shortest_distance {
             is_same = true;
         }
-
     }
 
     if is_same {
@@ -171,14 +164,7 @@ mod test {
     use super::*;
 
     fn sample() -> Vec<Point> {
-        vec![
-            (1, 1),
-            (1, 6),
-            (8, 3),
-            (3, 4),
-            (5, 5),
-            (8, 9),
-        ]
+        vec![(1, 1), (1, 6), (8, 3), (3, 4), (5, 5), (8, 9)]
     }
 
     #[test]

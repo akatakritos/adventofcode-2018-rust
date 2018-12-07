@@ -16,6 +16,7 @@ fn main() {
         Ok(4) => day_four(),
         Ok(5) => day_five(),
         Ok(6) => day_six(),
+        Ok(7) => day_seven(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1])),
     }
@@ -87,8 +88,26 @@ fn day_six() {
     let input = adventofcode::day06::read_input("inputs\\day06.txt").unwrap();
 
     let ((x, y), size) = adventofcode::day06::find_max_enclosed_area(&input);
-    println!("Max enclosed area is around point ({}, {}) and has size {}", x, y, size);
+    println!(
+        "Max enclosed area is around point ({}, {}) and has size {}",
+        x, y, size
+    );
 
     let result2 = adventofcode::day06::find_area_of_min_region(&input, 10_0000);
-    println!("The region less than 10k manahattan distance has {} points", result2);
+    println!(
+        "The region less than 10k manahattan distance has {} points",
+        result2
+    );
+}
+
+fn day_seven() {
+    let input = adventofcode::day07::read_input("inputs\\day07.txt").unwrap();
+    let order = adventofcode::day07::topological_sort(&input);
+    let time = adventofcode::day07::work_length(&input, 5, 60);
+
+    println!("You can process them in this order: {}", order);
+    println!(
+        "If it takes a base cost of 60 seconds, with 5 workers it will take {}s to complete",
+        time
+    );
 }

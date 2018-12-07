@@ -1,4 +1,6 @@
 extern crate regex;
+extern crate spectral;
+
 #[macro_use]
 extern crate lazy_static;
 extern crate chrono;
@@ -9,3 +11,4 @@ pub mod day03;
 pub mod day04;
 pub mod day05;
 pub mod day06;
+pub mod day07;
