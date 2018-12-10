@@ -17,6 +17,7 @@ fn main() {
         Ok(5) => day_five(),
         Ok(6) => day_six(),
         Ok(7) => day_seven(),
+        Ok(8) => day_eight(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1])),
     }
@@ -110,4 +111,13 @@ fn day_seven() {
         "If it takes a base cost of 60 seconds, with 5 workers it will take {}s to complete",
         time
     );
+}
+
+fn day_eight() {
+    let input = adventofcode::day08::read_file("inputs\\day08.txt");
+    let checksum = adventofcode::day08::metadata_checksum(&input);
+    let value = adventofcode::day08::calculate_node_value(&input);
+
+    println!("The checksum of the license file is {}.", checksum);
+    println!("The vale of the license file is {}", value);
 }

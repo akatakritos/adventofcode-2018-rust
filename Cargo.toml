@@ -7,4 +7,6 @@ authors = ["Matt Burke <mburke@nerdery.com>"]
 regex = "1.1.0"
 lazy_static = "1.2.0"
 chrono = "0.4.6"
+
+[dev-dependencies]
 spectral = "0.6.0"

@@ -238,8 +238,8 @@ mod test {
         let job: Job = "Step C must be finished before step A can begin."
             .parse()
             .unwrap();
-        assert_that(&job.name).is_equal_to('A');
-        assert_that(&job.prereq).is_equal_to('C');
+        assert_that!(&job.name).is_equal_to('A');
+        assert_that!(&job.prereq).is_equal_to('C');
     }
 
     #[test]
@@ -256,7 +256,7 @@ Step F must be finished before step E can begin."
             .collect();
 
         let result = topological_sort(&input);
-        assert_that(&result.as_str()).is_equal_to("CABDFE");
+        assert_that!(&result.as_str()).is_equal_to("CABDFE");
     }
 
     #[test]
@@ -264,7 +264,7 @@ Step F must be finished before step E can begin."
         let input = read_input("inputs\\day07.txt").unwrap();
         let result = topological_sort(&input);
 
-        assert_that(&result.as_str()).is_equal_to("BCADPVTJFZNRWXHEKSQLUYGMIO");
+        assert_that!(&result.as_str()).is_equal_to("BCADPVTJFZNRWXHEKSQLUYGMIO");
     }
 
     #[test]
@@ -281,13 +281,13 @@ Step F must be finished before step E can begin."
             .collect();
 
         let result = work_length(&input, 2, 0);
-        assert_that(&result).is_equal_to(15);
+        assert_that!(&result).is_equal_to(15);
     }
 
     #[test]
     fn work_length_input() {
         let input = read_input("inputs\\day07.txt").unwrap();
         let result = work_length(&input, 5, 60);
-        assert_that(&result).is_equal_to(973);
+        assert_that!(&result).is_equal_to(973);
     }
 }
