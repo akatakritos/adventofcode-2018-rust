@@ -210,7 +210,6 @@ impl WorkSim {
             }
         }
 
-
         None
     }
 

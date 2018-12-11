@@ -18,6 +18,7 @@ fn main() {
         Ok(6) => day_six(),
         Ok(7) => day_seven(),
         Ok(8) => day_eight(),
+        Ok(9) => day_nine(),
         Ok(d) => panic!(format!("Day {} not implemented.", d)),
         Err(_) => panic!(format!("Can't parse '{}' as a day", args[1])),
     }
@@ -120,4 +121,22 @@ fn day_eight() {
 
     println!("The checksum of the license file is {}.", checksum);
     println!("The vale of the license file is {}", value);
+}
+
+fn day_nine() {
+    const PLAYERS: usize = 486;
+    const PART1_LAST_MARBLE: u32 = 70833;
+    const PART2_LAST_MARBLE: u32 = PART1_LAST_MARBLE * 100;
+
+    let score1 = adventofcode::day09::winning_score(PLAYERS, PART1_LAST_MARBLE);
+    println!(
+        "With {} players playing {} marbles, the winner will have a score of {}.",
+        PLAYERS, PART1_LAST_MARBLE, score1
+    );
+
+    let score2 = adventofcode::day09::winning_score(PLAYERS, PART2_LAST_MARBLE);
+    println!(
+        "With {} players playing {} marbles, the winner will have a score of {}.",
+        PLAYERS, PART2_LAST_MARBLE, score2
+    );
 }

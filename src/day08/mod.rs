@@ -52,10 +52,7 @@ fn get_node(license: &[usize], index: &mut usize) -> LicenseNode {
 
     // println!("metadata={:?} children count={}", metadata, children.len());
 
-    LicenseNode {
-        metadata,
-        children,
-    }
+    LicenseNode { metadata, children }
 }
 
 fn sum_metadata(root: &LicenseNode) -> usize {
@@ -97,8 +94,8 @@ fn node_value(node: &LicenseNode) -> usize {
 
 #[cfg(test)]
 mod test {
-    use spectral::prelude::*;
     use super::*;
+    use spectral::prelude::*;
 
     #[test]
     fn metadata_checksum_sample() {
